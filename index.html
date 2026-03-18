@@ -1,364 +1,428 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ли Ян Бадминтон | 商品管理后台</title>
-<style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  body {
-    background: #e9ecef;
-    padding: 15px;
-  }
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  }
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #007bff;
-  }
-  h1 {
-    color: #212529;
-    font-size: 24px;
-  }
-  .tag {
-    background: #28a745;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-  }
-  .login-box {
-    max-width: 400px;
-    margin: 50px auto;
-    background: #f8f9fa;
-    padding: 25px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-  }
-  .login-box h3 {
-    margin-bottom: 20px;
-    color: #333;
-    text-align: center;
-  }
-  input[type="password"], input[type="text"], textarea {
-    width: 100%;
-    padding: 12px 15px;
-    margin: 8px 0;
-    border: 1px solid #ced4da;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: border-color 0.3s;
-  }
-  input[type="password"]:focus, input[type="text"]:focus, textarea:focus {
-    border-color: #80bdff;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0,123,255,.25);
-  }
-  button {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    transition: background 0.3s;
-    margin: 5px 0;
-  }
-  .btn-danger { background: #dc3545; }
-  .btn-warning { background: #ffc107; color: #212529; }
-  .btn-success { background: #28a745; }
-  button:hover { opacity: 0.9; transform: translateY(-1px); }
-  .admin-panel {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 30px;
-  }
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-bottom: 15px;
-  }
-  @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
-  .goods-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-  }
-  .good-card {
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
-  .good-.card:hover { transform: translateY(-5px); box-shadow: 0 5px 20px rgba(0,0,0,0.15); }
-  .good-img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-bottom: 1px solid #eee;
-  }
-  .good-body {
-    padding: 15px;
-  }
-  .good-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #212529;
-  }
-  .good-price {
-    color: #dc3545;
-    font-size: 18px;
-    font-weight: 600;
-    margin: 8px 0;
-  }
-  .good-desc {
-    font-size: 14px;
-    color: #6c757d;
-    margin-bottom: 15px;
-    min-height: 40px;
-  }
-  .good-actions {
-    display: flex;
-    gap: 5px;
-  }
-  .good-actions button {
-    flex: 1;
-    font-size: 14px;
-    padding: 8px 0;
-  }
-  .toast {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #28a745;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-    display: none;
-    z-index: 9999;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ли Ян Бадминтон | Магазин</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2d3748;
+        }
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        header p {
+            font-size: 1rem;
+            color: #718096;
+        }
+        .login-card {
+            background: white;
+            max-width: 420px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+        .login-card h3 {
+            text-align: center;
+            color: #2d3748;
+            margin-bottom: 25px;
+            font-size: 1.3rem;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+        }
+        .btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: #3182ce;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #2b6cb0;
+        }
+        .btn-secondary {
+            background: #718096;
+            color: white;
+            margin-top: 10px;
+        }
+        .btn-secondary:hover {
+            background: #4a5568;
+        }
+        .admin-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            display: none;
+        }
+        .admin-panel h3 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        .goods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .good-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            transition: transform 0.3s ease;
+        }
+        .good-card:hover {
+            transform: translateY(-5px);
+        }
+        .good-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .good-info {
+            padding: 18px;
+        }
+        .good-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        .good-price {
+            font-size: 1.2rem;
+            color: #e53e3e;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .good-note {
+            font-size: 0.9rem;
+            color: #718096;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .good-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-edit {
+            flex: 1;
+            padding: 8px;
+            background: #ed8936;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .btn-delete {
+            flex: 1;
+            padding: 8px;
+            background: #e53e3e;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .upload-preview {
+            margin-top: 10px;
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>Ли Ян Бадминтон</h1>
+            <p>Профессиональный магазин бадминтонного оборудования</p>
+        </header>
 
-<div class="container">
-  <div class="header">
-    <div>
-      <h1>📦 Ли Ян Бадминтон | 商品管理</h1>
-      <span class="tag">后台管理系统</span>
+        <!-- 登录卡片 -->
+        <div class="login-card" id="loginBox">
+            <h3>Вход для администратора</h3>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" id="pwd" placeholder="Введите пароль">
+            </div>
+            <button class="btn btn-primary" onclick="login()">Войти</button>
+        </div>
+
+        <!-- 管理面板 -->
+        <div class="admin-panel" id="adminPanel">
+            <h3>Добавить новый товар</h3>
+            <div class="form-group">
+                <label>Название товара</label>
+                <input type="text" id="name" placeholder="Например: Волан Nylon Pro">
+            </div>
+            <div class="form-group">
+                <label>Цена</label>
+                <input type="text" id="price" placeholder="Например: 1200 ₽">
+            </div>
+            <div class="form-group">
+                <label>Загрузить фото</label>
+                <input type="file" id="imgUpload" accept="image/*" onchange="previewImage(event)">
+                <img id="preview" class="upload-preview" style="display:none;">
+                <input type="hidden" id="imgUrl" value="">
+            </div>
+            <div class="form-group">
+                <label>Примечание</label>
+                <textarea id="note" rows="3" placeholder="Описание товара, характеристики"></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="addItem()">Добавить товар</button>
+            <button class="btn btn-secondary" onclick="logout()">Выйти из админки</button>
+        </div>
+
+        <!-- 商品列表 -->
+        <div class="goods-grid" id="goodsList"></div>
     </div>
-    <button id="logoutBtn" class="btn-danger" style="display: none;" onclick="logout()">🚪 退出登录</button>
-  </div>
 
-  <!-- 登录界面 -->
-  <div id="loginSection">
-    <div class="login-box">
-      <h3>🔐 管理员登录</h3>
-      <input type="password" id="pwdInput" placeholder="Введите пароль">
-      <button onclick="login()" style="width: 100%;">Войти</button>
-    </div>
-  </div>
+    <script>
+        const PASSWORD = "Ly52152100";
+        const DATA_URL = "https://liyang315.github.io/data.json";
+        const SAVE_DATA_URL = "https://api.github.com/repos/liyang315/liyang315.github.io/contents/data.json";
+        const UPLOAD_IMG_URL = "https://api.github.com/repos/liyang315/liyang315.github.io/contents/images/";
+        let items = [];
+        let token = "ghp_Pize7EDxrs8mYm6mC9bgOxyFCC4OUv2B2cDg"; // 你的Token
 
-  <!-- 管理后台 -->
-  <div id="adminSection" style="display: none;">
-    <!-- 添加商品表单 -->
-    <div class="admin-panel">
-      <h3>➕ 添加新商品</h3>
-      <div class="form-grid">
-        <div>
-          <label>商品名称 (Название)</label>
-          <input type="text" id="nameInput" placeholder="例如: Бадминтон Ракетка">
-        </div>
-        <div>
-          <label>商品价格 ( Цена)</label>
-          <input type="text" id="priceInput" placeholder="例如: 1500 руб">
-        </div>
-        <div style="grid-column: 1 / -1;">
-          <label>图片链接 (Ссылка на фото)</label>
-          <input type="text" id="imgUrlInput" placeholder="粘贴图片 URL 地址">
-        </div>
-        <div style="grid-column: 1 / -1;">
-          <label>商品备注 (Примечание)</label>
-          <textarea id="descInput" rows="3" placeholder="描述商品特点、材质等"></textarea>
-        </div>
-      </div>
-      <button class="btn-success" onclick="addGood()">✅ 确认添加</button>
-    </div>
+        // 页面加载时读取云端数据
+        window.onload = async () => {
+            try {
+                const res = await fetch(DATA_URL);
+                items = await res.json();
+                render();
+            } catch (e) {
+                console.error("Ошибка загрузки данных:", e);
+            }
+        };
 
-    <!-- 商品列表 -->
-    <h3>📋 商品列表</h3>
-    <div class="goods-grid" id="goodsList"></div>
-  </div>
-</div>
+        // 登录功能
+        function login() {
+            const inputPwd = document.getElementById("pwd").value;
+            if (inputPwd === PASSWORD) {
+                document.getElementById("loginBox").style.display = "none";
+                document.getElementById("adminPanel").style.display = "block";
+            } else {
+                alert("Неверный пароль!");
+            }
+        }
 
-<!-- 消息提示 -->
-<div id="toast" class="toast"></div>
+        // 退出登录
+        function logout() {
+            document.getElementById("adminPanel").style.display = "none";
+            document.getElementById("loginBox").style.display = "block";
+        }
 
-<script>
-  // 配置项
-  const ADMIN_CONFIG = {
-    password: "Ly52152100",
-    storageKey: "ly_badminton_goods"
-  };
+        // 预览上传的图片
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById("preview").src = e.target.result;
+                    document.getElementById("preview").style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        }
 
-  // 全局状态
-  let goods = JSON.parse(localStorage.getItem(ADMIN_CONFIG.storageKey)) || [];
-  let isLoggedIn = false;
+        // 上传图片到GitHub
+        async function uploadImage(file) {
+            const fileName = Date.now() + "_" + file.name;
+            const reader = new FileReader();
+            return new Promise((resolve, reject) => {
+                reader.onload = async () => {
+                    const base64 = btoa(reader.result);
+                    try {
+                        const res = await fetch(UPLOAD_IMG_URL + fileName, {
+                            method: "PUT",
+                            headers: {
+                                "Authorization": `token ${token}`,
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                message: "Upload image",
+                                content: base64
+                            })
+                        });
+                        if (res.ok) {
+                            resolve(`https://raw.githubusercontent.com/liyang315/liyang315.github.io/main/images/${fileName}`);
+                        } else {
+                            reject("Ошибка загрузки изображения");
+                        }
+                    } catch (e) {
+                        reject(e);
+                    }
+                };
+                reader.readAsBinaryString(file);
+            });
+        }
 
-  // DOM 元素
-  const loginSection = document.getElementById('loginSection');
-  const adminSection = document.getElementById('adminSection');
-  const logoutBtn = document.getElementById('logoutBtn');
-  const goodsList = document.getElementById('goodsList');
-  const toast = document.getElementById('toast');
+        // 渲染商品列表
+        function render() {
+            const list = document.getElementById("goodsList");
+            list.innerHTML = "";
+            items.forEach((item, index) => {
+                list.innerHTML += `
+                    <div class="good-card">
+                        <img src="${item.img}" alt="${item.name}" class="good-img" onerror="this.src='https://via.placeholder.com/280x200?text=No+Image'">
+                        <div class="good-info">
+                            <div class="good-name">${item.name}</div>
+                            <div class="good-price">${item.price}</div>
+                            <div class="good-note">${item.note || "Нет описания"}</div>
+                            <div class="good-actions">
+                                <button class="btn-edit" onclick="editItem(${index})">Изменить</button>
+                                <button class="btn-delete" onclick="deleteItem(${index})">Удалить</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
 
-  // 显示消息提示
-  function showToast(message, type = 'success') {
-    toast.textContent = message;
-    toast.style.background = type === 'success' ? '#28a745' : '#dc3545';
-    toast.style.display = 'block';
-    setTimeout(() => toast.style.display = 'none', 3000);
-  }
+        // 保存数据到GitHub云端
+        async function saveToGitHub() {
+            try {
+                // 获取当前文件SHA
+                const shaRes = await fetch(SAVE_DATA_URL, {
+                    headers: { Authorization: `token ${token}` }
+                });
+                const shaData = await shaRes.json();
+                const sha = shaData.sha;
 
-  // 登录
-  function login() {
-    const pwd = document.getElementById('pwdInput').value;
-    if (pwd === ADMIN_CONFIG.password) {
-      isLoggedIn = true;
-      loginSection.style.display = 'none';
-      adminSection.style.display = 'block';
-      logoutBtn.style.display = 'block';
-      showToast('✅ 登录成功！');
-    } else {
-      showToast('❌ 密码错误，请重试', 'error');
-    }
-  }
+                // 转成Base64编码
+                const content = btoa(unescape(encodeURIComponent(JSON.stringify(items, null, 2))));
 
-  // 退出
-  function logout() {
-    isLoggedIn = false;
-    adminSection.style.display = 'none';
-    loginSection.style.display = 'block';
-    logoutBtn.style.display = 'none';
-    document.getElementById('pwdInput').value = '';
-    showToast('👋 已退出登录');
-  }
+                // 提交更新
+                const saveRes = await fetch(SAVE_DATA_URL, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `token ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        message: "Обновить товары",
+                        content: content,
+                        sha: sha
+                    })
+                });
 
-  // 添加商品
-  function addGood() {
-    const name = document.getElementById('nameInput').value.trim();
-    const price = document.getElementById('priceInput').value.trim();
-    const img = document.getElementById('imgUrlInput').value.trim();
-    const desc = document.getElementById('descInput').value.trim();
+                if (saveRes.ok) {
+                    alert("✅ Данные успешно сохранены в облако!");
+                } else {
+                    alert("❌ Ошибка сохранения данных");
+                }
+            } catch (e) {
+                console.error(e);
+                alert("❌ Ошибка подключения к облаку");
+            }
+        }
 
-    if (!name || !price || !img) {
-      return showToast('❌ 请填写名称、价格和图片链接', 'error');
-    }
+        // 添加商品
+        async function addItem() {
+            const name = document.getElementById("name").value.trim();
+            const price = document.getElementById("price").value.trim();
+            const note = document.getElementById("note").value.trim();
+            const fileInput = document.getElementById("imgUpload");
+            const file = fileInput.files[0];
 
-    const newGood = {
-      id: Date.now(), // 用时间戳作为唯一ID
-      name,
-      price,
-      img,
-      desc
-    };
+            if (!name || !price) {
+                alert("⚠️ Заполните название и цену товара!");
+                return;
+            }
 
-    goods.push(newGood);
-    saveToStorage();
-    renderGoods();
+            let imgUrl = "";
+            if (file) {
+                try {
+                    imgUrl = await uploadImage(file);
+                } catch (e) {
+                    alert("❌ Ошибка загрузки изображения: " + e);
+                    return;
+                }
+            }
 
-    // 清空表单
-    document.getElementById('nameInput').value = '';
-    document.getElementById('priceInput').value = '';
-    document.getElementById('imgUrlInput').value = '';
-    document.getElementById('descInput').value = '';
+            items.push({ name, price, img: imgUrl, note });
+            render();
+            saveToGitHub();
 
-    showToast('✅ 商品添加成功！');
-  }
+            // 清空输入框
+            document.getElementById("name").value = "";
+            document.getElementById("price").value = "";
+            document.getElementById("imgUpload").value = "";
+            document.getElementById("preview").style.display = "none";
+            document.getElementById("note").value = "";
+        }
 
-  // 删除商品
-  function deleteGood(id) {
-    if (!confirm('⚠️ 确定要删除这个商品吗？删除后无法恢复！')) return;
-    goods = goods.filter(g => g.id !== id);
-    saveToStorage();
-    renderGoods();
-    showToast('🗑️ 商品已删除');
-  }
+        // 编辑商品
+        function editItem(index) {
+            const item = items[index];
+            document.getElementById("name").value = item.name;
+            document.getElementById("price").value = item.price;
+            document.getElementById("note").value = item.note;
+            items.splice(index, 1);
+        }
 
-  // 编辑商品 (简单的弹窗编辑)
-  function editGood(id) {
-    const good = goods.find(g => g.id === id);
-    if (!good) return;
-
-    const newName = prompt('修改商品名称:', good.name);
-    const newPrice = prompt('修改商品价格:', good.price);
-    const newImg = prompt('修改图片链接:', good.img);
-    const newDesc = prompt('修改商品备注:', good.desc);
-
-    if (newName !== null) good.name = newName;
-    if (newPrice !== null) good.price = newPrice;
-    if (newImg !== null) good.img = newImg;
-    if (newDesc !== null) good.desc = newDesc;
-
-    saveToStorage();
-    renderGoods();
-    showToast('✏️ 商品已更新');
-  }
-
-  // 保存到本地存储
-  function saveToStorage() {
-    localStorage.setItem(ADMIN_CONFIG.storageKey, JSON.stringify(goods));
-  }
-
-  // 渲染商品列表
-  function renderGoods() {
-    if (goods.length === 0) {
-      goodsList.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 50px; color: #999;">📭 暂无商品，请添加一个吧</div>';
-      return;
-    }
-
-    goodsList.innerHTML = goods.map(g => `
-      <div class="good-card">
-        <img src="${g.img}" class="good-img" alt="${g.name}">
-        <div class="good-body">
-          <h4 class="good-title">${g.name}</h4>
-          <div class="good-price">${g.price}</div>
-          <div class="good-desc">${g.desc || '-'}</div>
-          <div class="good-actions">
-            <button class="btn-warning" onclick="editGood(${g.id})">✏️ 编辑</button>
-            <button class="btn-danger" onclick="deleteGood(${g.id})">🗑️ 删除</button>
-          </div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  // 初始化
-  window.onload = function() {
-    renderGoods();
-  };
-</script>
+        // 删除商品
+        function deleteItem(index) {
+            if (confirm("❓ Вы уверены, что хотите удалить этот товар?")) {
+                items.splice(index, 1);
+                render();
+                saveToGitHub();
+            }
+        }
+    </script>
 </body>
 </html>
