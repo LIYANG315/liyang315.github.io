@@ -135,7 +135,6 @@
         }
         .good-name {
             font-size: 1.1rem;
-            font-weight: 600;
             color: #2d3748;
             margin-bottom: 8px;
         }
@@ -162,8 +161,6 @@
             color: white;
             border: none;
             border-radius: 6px;
-            font-size: 0.9rem;
-            cursor: pointer;
         }
         .btn-delete {
             flex: 1;
@@ -172,8 +169,6 @@
             color: white;
             border: none;
             border-radius: 6px;
-            font-size: 0.9rem;
-            cursor: pointer;
         }
     </style>
 </head>
@@ -184,7 +179,6 @@
         <p>Профессиональный магазин бадминтонного оборудования</p>
     </header>
 
-    <!-- 登录卡片 -->
     <div class="login-card" id="loginBox">
         <h3>Вход для администратора</h3>
         <div class="form-group">
@@ -194,7 +188,6 @@
         <button class="btn btn-primary" onclick="login()">Войти</button>
     </div>
 
-    <!-- 管理面板 -->
     <div class="admin-panel" id="adminPanel">
         <h3>Добавить новый товар</h3>
         <div class="form-group">
@@ -217,20 +210,25 @@
         <button class="btn btn-secondary" onclick="logout()">Выйти</button>
     </div>
 
-    <!-- 商品列表 -->
     <div class="goods-grid" id="goodsList"></div>
 </div>
 
 <script>
     const PASSWORD = "Ly52152100";
-    // 关键：用 Gitee 的公开 data.json，国内访问快
-    const DATA_URL = "https://gitee.com/li-yang315/images/raw/master/data.json";
-    // 商品保存到你 Gitee 的公开仓库
-    const SAVE_URL = "https://gitee.com/api/v5/repos/li-yang315/images/contents/data.json";
+
+    // 你的 Gitee 私人令牌（已帮你填好）
+    const GITEE_TOKEN = "57b610f2335929795625584297c15619";
+
+    // 你的 Gitee 仓库信息
+    const REPO_OWNER = "li-yang315";
+    const REPO_NAME = "images";
+    const FILE_PATH = "data.json";
+
+    // 固定读取地址
+    const DATA_URL = `https://gitee.com/api/v5/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}?access_token=${GITEE_TOKEN}`;
 
     let items = [];
 
-    // 登录
     function login() {
         const p = document.getElementById("pwd").value;
         if (p === PASSWORD) {
@@ -246,7 +244,6 @@
         document.getElementById("loginBox").style.display = "block";
     }
 
-    // 渲染商品
     function render() {
         const list = document.getElementById("goodsList");
         list.innerHTML = "";
@@ -268,39 +265,46 @@
         });
     }
 
-    // 从 Gitee 加载数据
     async function loadData() {
         try {
-            const res = await fetch(DATA_URL);
-            items = await res.json();
+            const r = await fetch(DATA_URL);
+            const j = await r.json();
+            if (j.content) {
+                const raw = atob(j.content);
+                items = JSON.parse(raw);
+            }
         } catch (e) {
             items = [];
         }
         render();
     }
 
-    // 保存到 Gitee（永久、公开、国内快）
     async function saveData() {
-        const content = btoa(unescape(encodeURIComponent(JSON.stringify(items, null, 2))));
         try {
+            const content = btoa(unescape(encodeURIComponent(JSON.stringify(items, null, 2))));
             const sha = await getCurrentSha();
-            const r = await fetch(SAVE_URL, {
-                method: "PUT",
+
+            const res = await fetch(`https://gitee.com/api/v5/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+                method: "POST",
                 body: JSON.stringify({
+                    access_token: GITEE_TOKEN,
                     message: "update goods",
                     content: content,
                     sha: sha
                 })
             });
-            if (r.ok) alert("✅ Данные сохранены!");
+
+            if (res.ok) {
+                alert("✅ Данные сохранены в облаке Gitee!");
+            }
         } catch (e) {}
     }
 
     async function getCurrentSha() {
         try {
             const r = await fetch(DATA_URL);
-            const text = await r.text();
-            return JSON.parse(text).sha;
+            const j = await r.json();
+            return j.sha || "";
         } catch (e) {
             return "";
         }
@@ -329,22 +333,4 @@
 
     function editItem(i) {
         const item = items[i];
-        document.getElementById("name").value = item.name;
-        document.getElementById("price").value = item.price;
-        document.getElementById("img").value = item.img;
-        document.getElementById("note").value = item.note;
-        items.splice(i, 1);
-    }
-
-    function deleteItem(i) {
-        if (confirm("Удалить?")) {
-            items.splice(i, 1);
-            render();
-            saveData();
-        }
-    }
-
-    window.onload = loadData;
-</script>
-</body>
-</html>
+        document.getElementById("name").value
