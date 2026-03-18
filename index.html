@@ -232,10 +232,10 @@
     <script>
         const PASSWORD = "Ly52152100";
         const DATA_URL = "https://liyang315.github.io/data.json";
-        const SAVE_DATA_URL = "https://api.github.com/repos/LIYANG315/liyang315.github.io/contents/data.json";
-        const UPLOAD_IMG_URL = "https://api.github.com/repos/LIYANG315/liyang315.github.io/contents/images/";
+        const SAVE_DATA_URL = "https://api.github.com/repos/liyang315/liyang315.github.io/contents/data.json";
+        const UPLOAD_IMG_URL = "https://api.github.com/repos/liyang315/liyang315.github.io/contents/images/";
         let items = [];
-        let token = "ghp_Pize7EDxrs8mYm6mC9bgOxyFCC4OUv2B2cDg"; // 你的Token
+        let token = "ghp_Pize7EDxrs8mYm6mC9bgOxyFCC4OUv2B2cDg";
 
         // 页面加载时读取云端数据
         window.onload = async () => {
@@ -298,7 +298,7 @@
                             })
                         });
                         if (res.ok) {
-                            resolve(`https://raw.githubusercontent.com/LIYANG315/liyang315.github.io/main/images/${fileName}`);
+                            resolve(`https://raw.githubusercontent.com/liyang315/liyang315.github.io/main/images/${fileName}`);
                         } else {
                             reject("Ошибка загрузки изображения");
                         }
