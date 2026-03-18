@@ -175,13 +175,6 @@
             font-size: 0.9rem;
             cursor: pointer;
         }
-        .upload-preview {
-            margin-top: 10px;
-            max-width: 100px;
-            max-height: 100px;
-            border-radius: 8px;
-            object-fit: cover;
-        }
     </style>
 </head>
 <body>
@@ -213,9 +206,8 @@
                 <input type="text" id="price" placeholder="Например: 1200 ₽">
             </div>
             <div class="form-group">
-                <label>Загрузить фото</label>
-                <input type="file" id="imgUpload" accept="image/*" onchange="previewImage(event)">
-                <img id="preview" class="upload-preview" style="display:none;">
+                <label>Ссылка на фото</label>
+                <input type="text" id="img" placeholder="https://example.com/image.jpg">
             </div>
             <div class="form-group">
                 <label>Примечание</label>
@@ -233,7 +225,6 @@
         const PASSWORD = "Ly52152100";
         const DATA_URL = "https://liyang315.github.io/data.json";
         const SAVE_DATA_URL = "https://api.github.com/repos/liyang315/liyang315.github.io/contents/data.json";
-        const UPLOAD_IMG_URL = "https://api.github.com/repos/liyang315/liyang315.github.io/contents/images/";
         let items = [];
         let token = "ghp_Pize7EDxrs8mYm6mC9bgOxyFCC4OUv2B2cDg";
 
@@ -263,51 +254,6 @@
         function logout() {
             document.getElementById("adminPanel").style.display = "none";
             document.getElementById("loginBox").style.display = "block";
-        }
-
-        // 预览上传的图片
-        function previewImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById("preview").src = e.target.result;
-                    document.getElementById("preview").style.display = "block";
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // 上传图片到GitHub
-        async function uploadImage(file) {
-            const fileName = Date.now() + "_" + file.name;
-            const reader = new FileReader();
-            return new Promise((resolve, reject) => {
-                reader.onload = async () => {
-                    const base64 = btoa(reader.result);
-                    try {
-                        const res = await fetch(UPLOAD_IMG_URL + fileName, {
-                            method: "PUT",
-                            headers: {
-                                "Authorization": `token ${token}`,
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                message: "Upload image",
-                                content: base64
-                            })
-                        });
-                        if (res.ok) {
-                            resolve(`https://raw.githubusercontent.com/liyang315/liyang315.github.io/main/images/${fileName}`);
-                        } else {
-                            reject("Ошибка загрузки изображения");
-                        }
-                    } catch (e) {
-                        reject(e);
-                    }
-                };
-                reader.readAsBinaryString(file);
-            });
         }
 
         // 渲染商品列表
@@ -371,37 +317,25 @@
         }
 
         // 添加商品
-        async function addItem() {
+        function addItem() {
             const name = document.getElementById("name").value.trim();
             const price = document.getElementById("price").value.trim();
+            const img = document.getElementById("img").value.trim();
             const note = document.getElementById("note").value.trim();
-            const fileInput = document.getElementById("imgUpload");
-            const file = fileInput.files[0];
 
             if (!name || !price) {
                 alert("⚠️ Заполните название и цену товара!");
                 return;
             }
 
-            let imgUrl = "";
-            if (file) {
-                try {
-                    imgUrl = await uploadImage(file);
-                } catch (e) {
-                    alert("❌ Ошибка загрузки изображения: " + e);
-                    return;
-                }
-            }
-
-            items.push({ name, price, img: imgUrl, note });
+            items.push({ name, price, img, note });
             render();
             saveToGitHub();
 
             // 清空输入框
             document.getElementById("name").value = "";
             document.getElementById("price").value = "";
-            document.getElementById("imgUpload").value = "";
-            document.getElementById("preview").style.display = "none";
+            document.getElementById("img").value = "";
             document.getElementById("note").value = "";
         }
 
@@ -410,6 +344,7 @@
             const item = items[index];
             document.getElementById("name").value = item.name;
             document.getElementById("price").value = item.price;
+            document.getElementById("img").value = item.img;
             document.getElementById("note").value = item.note;
             items.splice(index, 1);
         }
