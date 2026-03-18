@@ -178,185 +178,173 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Ли Ян Бадминтон</h1>
-            <p>Профессиональный магазин бадминтонного оборудования</p>
-        </header>
+<div class="container">
+    <header>
+        <h1>Ли Ян Бадминтон</h1>
+        <p>Профессиональный магазин бадминтонного оборудования</p>
+    </header>
 
-        <!-- 登录卡片 -->
-        <div class="login-card" id="loginBox">
-            <h3>Вход для администратора</h3>
-            <div class="form-group">
-                <label>Пароль</label>
-                <input type="password" id="pwd" placeholder="Введите пароль">
-            </div>
-            <button class="btn btn-primary" onclick="login()">Войти</button>
+    <!-- 登录卡片 -->
+    <div class="login-card" id="loginBox">
+        <h3>Вход для администратора</h3>
+        <div class="form-group">
+            <label>Пароль</label>
+            <input type="password" id="pwd" placeholder="Введите пароль">
         </div>
-
-        <!-- 管理面板 -->
-        <div class="admin-panel" id="adminPanel">
-            <h3>Добавить новый товар</h3>
-            <div class="form-group">
-                <label>Название товара</label>
-                <input type="text" id="name" placeholder="Например: Волан Nylon Pro">
-            </div>
-            <div class="form-group">
-                <label>Цена</label>
-                <input type="text" id="price" placeholder="Например: 1200 ₽">
-            </div>
-            <div class="form-group">
-                <label>Ссылка на фото</label>
-                <input type="text" id="img" placeholder="https://example.com/image.jpg">
-            </div>
-            <div class="form-group">
-                <label>Примечание</label>
-                <textarea id="note" rows="3" placeholder="Описание товара, характеристики"></textarea>
-            </div>
-            <button class="btn btn-primary" onclick="addItem()">Добавить товар</button>
-            <button class="btn btn-secondary" onclick="logout()">Выйти из админки</button>
-        </div>
-
-        <!-- 商品列表 -->
-        <div class="goods-grid" id="goodsList"></div>
+        <button class="btn btn-primary" onclick="login()">Войти</button>
     </div>
 
-    <script>
-        const PASSWORD = "Ly52152100";
-        const DATA_URL = "https://liyang315.github.io/data.json";
-        const SAVE_DATA_URL = "https://api.github.com/repos/liyang315/liyang315.github.io/contents/data.json";
-        let items = [];
-        let token = "ghp_Pize7EDxrs8mYm6mC9bgOxyFCC4OUv2B2cDg";
+    <!-- 管理面板 -->
+    <div class="admin-panel" id="adminPanel">
+        <h3>Добавить новый товар</h3>
+        <div class="form-group">
+            <label>Название товара</label>
+            <input type="text" id="name" placeholder="Например: Волан Nylon Pro">
+        </div>
+        <div class="form-group">
+            <label>Цена</label>
+            <input type="text" id="price" placeholder="Например: 1200 ₽">
+        </div>
+        <div class="form-group">
+            <label>Ссылка на фото (Gitee)</label>
+            <input type="text" id="img" placeholder="https://gitee.com/.../raw/master/...jpg">
+        </div>
+        <div class="form-group">
+            <label>Примечание</label>
+            <textarea id="note" rows="3" placeholder="Описание товара"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="addItem()">Добавить товар</button>
+        <button class="btn btn-secondary" onclick="logout()">Выйти</button>
+    </div>
 
-        // 页面加载时读取云端数据
-        window.onload = async () => {
-            try {
-                const res = await fetch(DATA_URL);
-                items = await res.json();
-                render();
-            } catch (e) {
-                console.error("Ошибка загрузки данных:", e);
-            }
-        };
+    <!-- 商品列表 -->
+    <div class="goods-grid" id="goodsList"></div>
+</div>
 
-        // 登录功能
-        function login() {
-            const inputPwd = document.getElementById("pwd").value;
-            if (inputPwd === PASSWORD) {
-                document.getElementById("loginBox").style.display = "none";
-                document.getElementById("adminPanel").style.display = "block";
-            } else {
-                alert("Неверный пароль!");
-            }
+<script>
+    const PASSWORD = "Ly52152100";
+    // 关键：用 Gitee 的公开 data.json，国内访问快
+    const DATA_URL = "https://gitee.com/li-yang315/images/raw/master/data.json";
+    // 商品保存到你 Gitee 的公开仓库
+    const SAVE_URL = "https://gitee.com/api/v5/repos/li-yang315/images/contents/data.json";
+
+    let items = [];
+
+    // 登录
+    function login() {
+        const p = document.getElementById("pwd").value;
+        if (p === PASSWORD) {
+            document.getElementById("loginBox").style.display = "none";
+            document.getElementById("adminPanel").style.display = "block";
+        } else {
+            alert("Неверный пароль!");
         }
+    }
 
-        // 退出登录
-        function logout() {
-            document.getElementById("adminPanel").style.display = "none";
-            document.getElementById("loginBox").style.display = "block";
-        }
+    function logout() {
+        document.getElementById("adminPanel").style.display = "none";
+        document.getElementById("loginBox").style.display = "block";
+    }
 
-        // 渲染商品列表
-        function render() {
-            const list = document.getElementById("goodsList");
-            list.innerHTML = "";
-            items.forEach((item, index) => {
-                list.innerHTML += `
-                    <div class="good-card">
-                        <img src="${item.img}" alt="${item.name}" class="good-img" onerror="this.src='https://via.placeholder.com/280x200?text=No+Image'">
-                        <div class="good-info">
-                            <div class="good-name">${item.name}</div>
-                            <div class="good-price">${item.price}</div>
-                            <div class="good-note">${item.note || "Нет описания"}</div>
-                            <div class="good-actions">
-                                <button class="btn-edit" onclick="editItem(${index})">Изменить</button>
-                                <button class="btn-delete" onclick="deleteItem(${index})">Удалить</button>
-                            </div>
+    // 渲染商品
+    function render() {
+        const list = document.getElementById("goodsList");
+        list.innerHTML = "";
+        items.forEach((item, i) => {
+            list.innerHTML += `
+                <div class="good-card">
+                    <img src="${item.img}" class="good-img" onerror="this.src='https://via.placeholder.com/280x200?text=No+Image'">
+                    <div class="good-info">
+                        <div class="good-name">${item.name}</div>
+                        <div class="good-price">${item.price}</div>
+                        <div class="good-note">${item.note}</div>
+                        <div class="good-actions">
+                            <button class="btn-edit" onclick="editItem(${i})">Изменить</button>
+                            <button class="btn-delete" onclick="deleteItem(${i})">Удалить</button>
                         </div>
                     </div>
-                `;
+                </div>
+            `;
+        });
+    }
+
+    // 从 Gitee 加载数据
+    async function loadData() {
+        try {
+            const res = await fetch(DATA_URL);
+            items = await res.json();
+        } catch (e) {
+            items = [];
+        }
+        render();
+    }
+
+    // 保存到 Gitee（永久、公开、国内快）
+    async function saveData() {
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(items, null, 2))));
+        try {
+            const sha = await getCurrentSha();
+            const r = await fetch(SAVE_URL, {
+                method: "PUT",
+                body: JSON.stringify({
+                    message: "update goods",
+                    content: content,
+                    sha: sha
+                })
             });
+            if (r.ok) alert("✅ Данные сохранены!");
+        } catch (e) {}
+    }
+
+    async function getCurrentSha() {
+        try {
+            const r = await fetch(DATA_URL);
+            const text = await r.text();
+            return JSON.parse(text).sha;
+        } catch (e) {
+            return "";
+        }
+    }
+
+    function addItem() {
+        const name = document.getElementById("name").value.trim();
+        const price = document.getElementById("price").value.trim();
+        const img = document.getElementById("img").value.trim();
+        const note = document.getElementById("note").value.trim();
+
+        if (!name || !price) {
+            alert("Заполните название и цену!");
+            return;
         }
 
-        // 保存数据到GitHub云端
-        async function saveToGitHub() {
-            try {
-                // 获取当前文件SHA
-                const shaRes = await fetch(SAVE_DATA_URL, {
-                    headers: { Authorization: `token ${token}` }
-                });
-                const shaData = await shaRes.json();
-                const sha = shaData.sha;
+        items.push({ name, price, img, note });
+        render();
+        saveData();
 
-                // 转成Base64编码
-                const content = btoa(unescape(encodeURIComponent(JSON.stringify(items, null, 2))));
+        document.getElementById("name").value = "";
+        document.getElementById("price").value = "";
+        document.getElementById("img").value = "";
+        document.getElementById("note").value = "";
+    }
 
-                // 提交更新
-                const saveRes = await fetch(SAVE_DATA_URL, {
-                    method: "PUT",
-                    headers: {
-                        "Authorization": `token ${token}`,
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        message: "Обновить товары",
-                        content: content,
-                        sha: sha
-                    })
-                });
+    function editItem(i) {
+        const item = items[i];
+        document.getElementById("name").value = item.name;
+        document.getElementById("price").value = item.price;
+        document.getElementById("img").value = item.img;
+        document.getElementById("note").value = item.note;
+        items.splice(i, 1);
+    }
 
-                if (saveRes.ok) {
-                    alert("✅ Данные успешно сохранены в облако!");
-                } else {
-                    alert("❌ Ошибка сохранения данных");
-                }
-            } catch (e) {
-                console.error(e);
-                alert("❌ Ошибка подключения к облаку");
-            }
-        }
-
-        // 添加商品
-        function addItem() {
-            const name = document.getElementById("name").value.trim();
-            const price = document.getElementById("price").value.trim();
-            const img = document.getElementById("img").value.trim();
-            const note = document.getElementById("note").value.trim();
-
-            if (!name || !price) {
-                alert("⚠️ Заполните название и цену товара!");
-                return;
-            }
-
-            items.push({ name, price, img, note });
+    function deleteItem(i) {
+        if (confirm("Удалить?")) {
+            items.splice(i, 1);
             render();
-            saveToGitHub();
-
-            // 清空输入框
-            document.getElementById("name").value = "";
-            document.getElementById("price").value = "";
-            document.getElementById("img").value = "";
-            document.getElementById("note").value = "";
+            saveData();
         }
+    }
 
-        // 编辑商品
-        function editItem(index) {
-            const item = items[index];
-            document.getElementById("name").value = item.name;
-            document.getElementById("price").value = item.price;
-            document.getElementById("img").value = item.img;
-            document.getElementById("note").value = item.note;
-            items.splice(index, 1);
-        }
-
-        // 删除商品
-        function deleteItem(index) {
-            if (confirm("❓ Вы уверены, что хотите удалить этот товар?")) {
-                items.splice(index, 1);
-                render();
-                saveToGitHub();
-            }
-        }
-    </script>
+    window.onload = loadData;
+</script>
 </body>
 </html>
